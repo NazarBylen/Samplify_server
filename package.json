@@ -1,19 +1,28 @@
 {
-  "name": "samplify-server",
-  "version": "0.0.0",
-  "private": true,
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
   "scripts": {
-    "start": "node ./bin/www"
+    "compile": "tsc && node ./src/index.js",
+    "start": "tsc && node ./src/index.js",
+    "dev": "nodemon -e ts  --exec npm run compile",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "http-errors": "~1.6.3",
-    "morgan": "~1.9.1",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.1",
     "mysql": "^2.18.1",
-    "mysql2": "^3.5.2",
-    "pug": "2.0.0-beta11"
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.17"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.4.2",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.1.6"
   }
 }

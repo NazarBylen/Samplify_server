@@ -1,6 +1,7 @@
 import "reflect-metadata"
 import * as express from 'express'
 import * as cors from 'cors'
+import * as path from "path";
 
 import {dbInstance} from './services/db';
 import modules from './modules'
@@ -14,6 +15,7 @@ dbInstance.initialize()
   })
   .catch((error) => console.log(error))
 
+app.use(express.static(path.join(__dirname, '../public')))
 app.use(cors());
 app.use(express.json())
 

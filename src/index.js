@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const db_1 = require("./services/db");
 const modules_1 = require("./modules");
 const app = express();
@@ -12,6 +13,7 @@ db_1.dbInstance.initialize()
     console.log(`< MySQL has been connected`);
 })
     .catch((error) => console.log(error));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(cors());
 app.use(express.json());
 function errorHandler(error, req, res, next) {

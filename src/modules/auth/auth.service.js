@@ -49,8 +49,9 @@ function logIn(req, res, next) {
             const refreshToken = (0, jwt_1.generateRefreshToken)({ email });
             user.accessToken = accessToken;
             user.refreshToken = refreshToken;
+            const id = user.id;
             yield usersRepository.save(user);
-            return res.status(200).json({ email, accessToken, refreshToken });
+            return res.status(200).json({ id, email, accessToken, refreshToken });
         }
         catch (error) {
             return next(error);

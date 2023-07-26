@@ -39,9 +39,12 @@ export async function logIn(req, res, next) {
 
         user.accessToken = accessToken;
         user.refreshToken = refreshToken;
+
+        const id = user.id
+
         await usersRepository.save(user)
 
-        return res.status(200).json({email, accessToken, refreshToken});
+        return res.status(200).json({id, email, accessToken, refreshToken});
     } catch (error) {
         return next(error)
     }

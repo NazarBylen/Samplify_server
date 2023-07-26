@@ -1,6 +1,7 @@
 import authModule from './auth/auth.module';
 import artistsModule from "./artists/artists.module";
 import songsModule from "./songs/songs.module";
+import favouritesModule from "./favourites/favourites.module";
 
 const API_PREFIX = '/api'
 
@@ -22,7 +23,13 @@ const modules = [
         module: songsModule.controller,
         entity: songsModule.entity,
         route: `${API_PREFIX}/songs`
-    }
+    },
+    {
+        name: 'favourites',
+        module: favouritesModule.controller,
+        entity: favouritesModule.entity,
+        route: `${API_PREFIX}/favourites`
+    },
 ];
 
 export default modules;

@@ -17,12 +17,12 @@ favouritesController.get("/", function (req, res, next) {
         return yield favouritesService.getAllFavourites(req, res, next);
     });
 });
-favouritesController.get("/getFavourite/:userId", function (req, res, next) {
+favouritesController.get("/:userId", function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield favouritesService.getFavouriteSongsById(req, res, next);
     });
 });
-favouritesController.post("/addFavourite", function (req, res, next) {
+favouritesController.post("/", function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield favouritesService.saveToFavourites(req, res, next);
     });

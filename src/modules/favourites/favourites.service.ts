@@ -53,3 +53,20 @@ export const saveToFavourites = async (req, res, next) => {
         return next(error)
     }
 }
+
+export const deleteFromFavourites = async (req, res, next) => {
+    try {
+        const {songId} = req.params
+
+        const favouritesRepository = dbInstance.getRepository(favouritesEntity)
+        const favourites = new Favourites()
+
+        favourites.id = songId;
+
+        await favouritesRepository.delete(favourites)
+
+        return res.status(200).json();
+    } catch (error) {
+        return next(error)
+    }
+}

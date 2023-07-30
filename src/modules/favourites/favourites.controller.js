@@ -27,5 +27,10 @@ favouritesController.post("/", function (req, res, next) {
         return yield favouritesService.saveToFavourites(req, res, next);
     });
 });
+favouritesController.delete("/:songId", function (req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield favouritesService.deleteFromFavourites(req, res, next);
+    });
+});
 exports.default = favouritesController;
 //# sourceMappingURL=favourites.controller.js.map

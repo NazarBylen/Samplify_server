@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveToFavourites = exports.getFavouriteSongsById = exports.getAllFavourites = void 0;
+exports.deleteFromFavourites = exports.saveToFavourites = exports.getFavouriteSongsById = exports.getAllFavourites = void 0;
 const db_1 = require("../../services/db");
 const favourites_entity_1 = require("./favourites.entity");
 const getAllFavourites = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -60,4 +60,18 @@ const saveToFavourites = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.saveToFavourites = saveToFavourites;
+const deleteFromFavourites = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { songId } = req.params;
+        const favouritesRepository = db_1.dbInstance.getRepository(favourites_entity_1.default);
+        const favourites = new favourites_entity_1.Favourites();
+        favourites.id = songId;
+        yield favouritesRepository.delete(favourites);
+        return res.status(201).json();
+    }
+    catch (error) {
+        return next(error);
+    }
+});
+exports.deleteFromFavourites = deleteFromFavourites;
 //# sourceMappingURL=favourites.service.js.map

@@ -15,5 +15,9 @@ favouritesController.post("/", async function (req, res,next){
     return await favouritesService.saveToFavourites(req, res, next);
 })
 
+favouritesController.delete("/:songId", async function (req, res,next){
+    return await favouritesService.deleteFromFavourites(req, res, next);
+})
+
 
 export default favouritesController;

@@ -67,7 +67,7 @@ const deleteFromFavourites = (req, res, next) => __awaiter(void 0, void 0, void 
         const favourites = new favourites_entity_1.Favourites();
         favourites.id = songId;
         yield favouritesRepository.delete(favourites);
-        return res.status(201).json();
+        return res.status(200).json();
     }
     catch (error) {
         return next(error);

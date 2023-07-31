@@ -62,13 +62,9 @@ exports.logIn = logIn;
 function userInfo(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { userId } = req.params;
+            const { id } = req.params;
             const usersRepository = db_1.dbInstance.getRepository(users_entity_1.default);
-            const currentUser = yield usersRepository.find({
-                where: {
-                    id: userId,
-                }
-            });
+            const currentUser = yield usersRepository.findOneBy({ id });
             return res.status(200).json(currentUser);
         }
         catch (error) {

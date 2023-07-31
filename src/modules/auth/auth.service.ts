@@ -53,16 +53,11 @@ export async function logIn(req, res, next) {
 export async function userInfo(req, res, next) {
     try {
 
-        const {userId} = req.params
+        const {id} = req.params
         const usersRepository = dbInstance.getRepository(Users)
 
-        const currentUser = await usersRepository.find(
-            {
-                where: {
-                    id: userId,
-                }
-            }
-        )
+        const currentUser = await usersRepository.findOneBy({ id })
+
         return res.status(200).json(currentUser);
     } catch (error) {
         return next(error)

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logIn = exports.signUp = void 0;
+exports.changePassword = exports.userInfo = exports.logIn = exports.signUp = void 0;
 const bcrypt = require("bcrypt");
 const db_1 = require("../../services/db");
 const jwt_1 = require("../../utils/jwt");
@@ -59,4 +59,41 @@ function logIn(req, res, next) {
     });
 }
 exports.logIn = logIn;
+function userInfo(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { userId } = req.params;
+            const usersRepository = db_1.dbInstance.getRepository(users_entity_1.default);
+            const currentUser = yield usersRepository.find({
+                where: {
+                    id: userId,
+                }
+            });
+            return res.status(200).json(currentUser);
+        }
+        catch (error) {
+            return next(error);
+        }
+    });
+}
+exports.userInfo = userInfo;
+function changePassword(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { userId } = req.params;
+            const { newPassword } = req.body;
+            const usersRepository = db_1.dbInstance.getRepository(users_entity_1.default);
+            const user = yield usersRepository.findOneBy({ id: userId });
+            const saltRounds = 10;
+            const salt = yield bcrypt.genSalt(saltRounds);
+            user.password = yield bcrypt.hash(newPassword, salt);
+            yield usersRepository.save(user);
+            return res.status(200).json(user);
+        }
+        catch (error) {
+            return next(error);
+        }
+    });
+}
+exports.changePassword = changePassword;
 //# sourceMappingURL=auth.service.js.map

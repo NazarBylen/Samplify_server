@@ -27,5 +27,15 @@ authController.patch('/refresh-token', function (req, res) {
         res.json({});
     });
 });
+authController.get('/:id', function (req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield authService.userInfo(req, res, next);
+    });
+});
+authController.patch('/change-password/:id', function (req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield authService.changePassword(req, res, next);
+    });
+});
 exports.default = authController;
 //# sourceMappingURL=auth.controller.js.map

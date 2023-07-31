@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 
 import {dbInstance} from '../../services/db';
-import {generateRefreshToken, generateAccessToken} from '../../utils/jwt';
+import {generateAccessToken, generateRefreshToken} from '../../utils/jwt';
 import Users from './users.entity';
 
 export async function signUp(req, res, next) {
@@ -45,6 +45,47 @@ export async function logIn(req, res, next) {
         await usersRepository.save(user)
 
         return res.status(200).json({id, email, accessToken, refreshToken});
+    } catch (error) {
+        return next(error)
+    }
+}
+
+export async function userInfo(req, res, next) {
+    try {
+
+        const {userId} = req.params
+        const usersRepository = dbInstance.getRepository(Users)
+
+        const currentUser = await usersRepository.find(
+            {
+                where: {
+                    id: userId,
+                }
+            }
+        )
+        return res.status(200).json(currentUser);
+    } catch (error) {
+        return next(error)
+    }
+}
+
+export async function changePassword(req, res, next) {
+    try {
+
+        const {userId} = req.params
+        const {newPassword} = req.body
+
+        const usersRepository = dbInstance.getRepository(Users)
+        const user = await usersRepository.findOneBy({ id: userId })
+
+        const saltRounds = 10;
+        const salt = await bcrypt.genSalt(saltRounds);
+
+        user.password = await bcrypt.hash(newPassword, salt)
+
+        await usersRepository.save(user)
+
+        return res.status(200).json(user);
     } catch (error) {
         return next(error)
     }

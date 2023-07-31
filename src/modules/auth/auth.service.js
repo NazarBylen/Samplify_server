@@ -76,10 +76,10 @@ exports.userInfo = userInfo;
 function changePassword(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { userId } = req.params;
+            const { id } = req.params;
             const { newPassword } = req.body;
             const usersRepository = db_1.dbInstance.getRepository(users_entity_1.default);
-            const user = yield usersRepository.findOneBy({ id: userId });
+            const user = yield usersRepository.findOneBy({ id });
             const saltRounds = 10;
             const salt = yield bcrypt.genSalt(saltRounds);
             user.password = yield bcrypt.hash(newPassword, salt);

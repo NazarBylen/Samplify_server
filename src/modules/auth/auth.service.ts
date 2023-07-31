@@ -67,11 +67,11 @@ export async function userInfo(req, res, next) {
 export async function changePassword(req, res, next) {
     try {
 
-        const {userId} = req.params
+        const {id} = req.params
         const {newPassword} = req.body
 
         const usersRepository = dbInstance.getRepository(Users)
-        const user = await usersRepository.findOneBy({ id: userId })
+        const user = await usersRepository.findOneBy({ id })
 
         const saltRounds = 10;
         const salt = await bcrypt.genSalt(saltRounds);

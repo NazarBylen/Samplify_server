@@ -47,6 +47,7 @@ export async function logIn(req, res, next) {
 
         return res.status(200).json({id, email, accessToken, refreshToken});
     } catch (error) {
+        error.statusCode=404
         return next(error)
     }
 }

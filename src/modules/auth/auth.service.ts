@@ -96,12 +96,10 @@ export async function deleteAccount(req, res, next) {
         const favouritesRepository = dbInstance.getRepository(Favourites)
 
         const user = await usersRepository.findOneBy({ id })
-        const favourites = await favouritesRepository.findBy({userId: id})
 
-
-        await usersRepository.delete(user)
 
         await favouritesRepository.delete({ userId: id });
+        await usersRepository.delete(user)
 
         return res.status(200).json();
     } catch (error) {

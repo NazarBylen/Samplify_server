@@ -100,9 +100,8 @@ function deleteAccount(req, res, next) {
             const usersRepository = db_1.dbInstance.getRepository(users_entity_1.default);
             const favouritesRepository = db_1.dbInstance.getRepository(favourites_entity_1.default);
             const user = yield usersRepository.findOneBy({ id });
-            const favourites = yield favouritesRepository.findBy({ userId: id });
-            yield usersRepository.delete(user);
             yield favouritesRepository.delete({ userId: id });
+            yield usersRepository.delete(user);
             return res.status(200).json();
         }
         catch (error) {

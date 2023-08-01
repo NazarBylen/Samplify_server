@@ -24,4 +24,8 @@ authController.patch('/change-password/:id', async function(req, res, next) {
     return await authService.changePassword(req, res, next)
 });
 
+authController.delete('/delete/:id', async function(req, res, next) {
+    return await authService.deleteAccount(req, res, next)
+});
+
 export default authController;

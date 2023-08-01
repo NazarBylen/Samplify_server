@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import {dbInstance} from '../../services/db';
 import {generateAccessToken, generateRefreshToken} from '../../utils/jwt';
 import Users from './users.entity';
+import Favourites from "../favourites/favourites.entity";
 
 export async function signUp(req, res, next) {
     try {
@@ -81,6 +82,28 @@ export async function changePassword(req, res, next) {
         await usersRepository.save(user)
 
         return res.status(200).json(user);
+    } catch (error) {
+        return next(error)
+    }
+}
+
+export async function deleteAccount(req, res, next) {
+    try {
+
+        const {id} = req.params
+
+        const usersRepository = dbInstance.getRepository(Users)
+        const favouritesRepository = dbInstance.getRepository(Favourites)
+
+        const user = await usersRepository.findOneBy({ id })
+        const favourites = await favouritesRepository.findBy({userId: id})
+
+
+        await usersRepository.delete(user)
+
+        await favouritesRepository.delete({ userId: id });
+
+        return res.status(200).json();
     } catch (error) {
         return next(error)
     }

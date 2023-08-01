@@ -9,11 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changePassword = exports.userInfo = exports.logIn = exports.signUp = void 0;
+exports.deleteAccount = exports.changePassword = exports.userInfo = exports.logIn = exports.signUp = void 0;
 const bcrypt = require("bcrypt");
 const db_1 = require("../../services/db");
 const jwt_1 = require("../../utils/jwt");
 const users_entity_1 = require("./users.entity");
+const favourites_entity_1 = require("../favourites/favourites.entity");
 function signUp(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -92,4 +93,22 @@ function changePassword(req, res, next) {
     });
 }
 exports.changePassword = changePassword;
+function deleteAccount(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { id } = req.params;
+            const usersRepository = db_1.dbInstance.getRepository(users_entity_1.default);
+            const favouritesRepository = db_1.dbInstance.getRepository(favourites_entity_1.default);
+            const user = yield usersRepository.findOneBy({ id });
+            const favourites = yield favouritesRepository.findBy({ userId: id });
+            yield usersRepository.delete(user);
+            yield favouritesRepository.delete({ userId: id });
+            return res.status(200).json();
+        }
+        catch (error) {
+            return next(error);
+        }
+    });
+}
+exports.deleteAccount = deleteAccount;
 //# sourceMappingURL=auth.service.js.map

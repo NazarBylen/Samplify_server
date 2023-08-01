@@ -37,5 +37,10 @@ authController.patch('/change-password/:id', function (req, res, next) {
         return yield authService.changePassword(req, res, next);
     });
 });
+authController.delete('/delete/:id', function (req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield authService.deleteAccount(req, res, next);
+    });
+});
 exports.default = authController;
 //# sourceMappingURL=auth.controller.js.map

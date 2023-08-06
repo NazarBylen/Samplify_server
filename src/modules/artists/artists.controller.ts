@@ -13,7 +13,7 @@ artistsController.get("/songs", async function(req, res, next) {
 })
 
 artistsController.get("/:slug", async function(req, res, next) {
-    return await artistsService.getArtistWithSongs(req, res, next);
+    return await artistsService.getArtist(req, res, next);
 })
 
 export default artistsController;

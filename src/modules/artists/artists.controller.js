@@ -24,7 +24,7 @@ artistsController.get("/songs", function (req, res, next) {
 });
 artistsController.get("/:slug", function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield artistsService.getArtistWithSongs(req, res, next);
+        return yield artistsService.getArtist(req, res, next);
     });
 });
 exports.default = artistsController;

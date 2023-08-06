@@ -11,5 +11,9 @@ songsController.get("/artist", async function(req, res, next) {
     return await songsService.getSongsWithArtist(req, res, next);
 })
 
+songsController.get("/:id", async function(req, res, next) {
+    return await songsService.getSongsByArtist(req, res, next);
+})
+
 
 export default songsController;

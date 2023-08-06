@@ -25,19 +25,23 @@ export const getArtists = async (req, res, next) => {
     }
 }
 
-export const getArtistWithSongs = async (req, res, next) => {
+export const getArtist = async (req, res, next) => {
     try {
         const { slug } = req.params
+
+        const { page=1 } = req.query;
+
         const artistsRepository = dbInstance.getRepository(artistsEntity)
-        const allArtists = await artistsRepository.find({
+
+
+        const artist = await artistsRepository.find({
             where: {
                 slug,
-            },
-            relations: {
-                songs: true,
             }
         })
-        return res.status(200).json(allArtists)
+
+        return res.status(200).json(artist[0]);
+
     } catch (error) {
         return next(error)
     }

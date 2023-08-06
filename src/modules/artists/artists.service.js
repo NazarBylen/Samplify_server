@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getArtistWithSongs = exports.getArtists = exports.getArtistsWithSongs = void 0;
+exports.getArtist = exports.getArtists = exports.getArtistsWithSongs = void 0;
 const artists_entity_1 = require("./artists.entity");
 const db_1 = require("../../services/db");
 const getArtistsWithSongs = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,23 +38,31 @@ const getArtists = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.getArtists = getArtists;
-const getArtistWithSongs = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getArtist = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { slug } = req.params;
+        const { page = 1 } = req.query;
         const artistsRepository = db_1.dbInstance.getRepository(artists_entity_1.default);
-        const allArtists = yield artistsRepository.find({
+        const artist = yield artistsRepository.find({
             where: {
                 slug,
-            },
-            relations: {
-                songs: true,
             }
         });
-        return res.status(200).json(allArtists);
+        // const artistWithSongsResults = await artistsRepository
+        //     .createQueryBuilder("artists")
+        //     .leftJoinAndSelect("artists.songs", "songs")
+        //     .take(1)
+        //     .getMany()
+        // const [songs, totalRecords] = ArtistWithSongsResults;
+        // const paginate = pagination({
+        //     total: totalRecords,
+        //     page
+        // })
+        return res.status(200).json(artist[0]);
     }
     catch (error) {
         return next(error);
     }
 });
-exports.getArtistWithSongs = getArtistWithSongs;
+exports.getArtist = getArtist;
 //# sourceMappingURL=artists.service.js.map

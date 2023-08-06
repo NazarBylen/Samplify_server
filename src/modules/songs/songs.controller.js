@@ -22,5 +22,10 @@ songsController.get("/artist", function (req, res, next) {
         return yield songsService.getSongsWithArtist(req, res, next);
     });
 });
+songsController.get("/:id", function (req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield songsService.getSongsByArtist(req, res, next);
+    });
+});
 exports.default = songsController;
 //# sourceMappingURL=songs.controller.js.map

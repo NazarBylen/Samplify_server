@@ -48,16 +48,6 @@ const getArtist = (req, res, next) => __awaiter(void 0, void 0, void 0, function
                 slug,
             }
         });
-        // const artistWithSongsResults = await artistsRepository
-        //     .createQueryBuilder("artists")
-        //     .leftJoinAndSelect("artists.songs", "songs")
-        //     .take(1)
-        //     .getMany()
-        // const [songs, totalRecords] = ArtistWithSongsResults;
-        // const paginate = pagination({
-        //     total: totalRecords,
-        //     page
-        // })
         return res.status(200).json(artist[0]);
     }
     catch (error) {

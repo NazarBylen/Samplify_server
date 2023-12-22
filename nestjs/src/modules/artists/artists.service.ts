@@ -14,6 +14,14 @@ export class ArtistsService {
         return this.artistRepository.find();
     }
 
+    getArtistsWithSongs(): Promise<Artists[]> {
+        return this.artistRepository.find({
+            relations: {
+                songs: true,
+            }
+        });
+    }
+
     getArtist(slug: string): Promise<Artists | null> {
         return this.artistRepository.findOneBy({ slug });
     }

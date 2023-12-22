@@ -9,6 +9,8 @@ import {ArtistsModule} from "./src/modules/artists/artists.module"
 import { Artists } from "./src/modules/artists/artists.entity"
 import { Songs } from "./src/modules/songs/songs.entity"
 import { SongsModule } from "./src/modules/songs/songs.module"
+import { AuthModule } from "./src/modules/auth/auth.module"
+import { Users } from "./src/modules/auth/users.entity"
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { SongsModule } from "./src/modules/songs/songs.module"
       username: 'root',
       password: 'root',
       database: 'samplify',
-      entities: [Artists, Songs],
+      entities: [Artists, Songs, Users,],
       synchronize: true,
       logging: false,
     }),
@@ -27,7 +29,7 @@ import { SongsModule } from "./src/modules/songs/songs.module"
       rootPath: join(__dirname, '..', './public'),
       exclude: ['/api/(.*)'],
     }),
-    ArtistsModule, SongsModule,
+    ArtistsModule, SongsModule, AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

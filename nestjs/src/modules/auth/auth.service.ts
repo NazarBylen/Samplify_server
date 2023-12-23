@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 
-import { Injectable, Post } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './users.entity';
@@ -29,30 +29,34 @@ export class AuthService {
     }
 
     async logIn(userData){
-        const { email, password } = userData;
+        try {
+            const { email, password } = userData;
 
-        const user = await this.userRepository.findOneBy({email})
-        if (!user) throw { message: "User does not exist", status: 404 }
+            const user = await this.userRepository.findOneBy({email})
+            if (!user) throw { message: "User does not exist", status: 404 }
 
-        const checkPassword = await bcrypt.compare(password, user.password);
-        if (!checkPassword) throw { message: "Wrong username or password", status: 401 }
+            const checkPassword = await bcrypt.compare(password, user.password);
+            if (!checkPassword) throw { message: "Wrong username or password", status: 401 }
 
-        const accessToken = generateAccessToken ({email})
-        const refreshToken = generateRefreshToken ({email})
+            const accessToken = generateAccessToken ({email})
+            const refreshToken = generateRefreshToken ({email})
 
-        user.accessToken = accessToken;
-        user.refreshToken = refreshToken;
+            user.accessToken = accessToken;
+            user.refreshToken = refreshToken;
 
-        const id = user.id
+            const id = user.id
 
-        await this.userRepository.save(user)
+            await this.userRepository.save(user)
 
 
-        return {
-            id,
-            email,
-            accessToken,
-            refreshToken
+            return {
+                id,
+                email,
+                accessToken,
+                refreshToken
+            }
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 

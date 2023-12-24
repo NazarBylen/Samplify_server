@@ -17,18 +17,25 @@ export class AuthService {
     ) {}
 
     async signUp(userData) {
-        const { email, password } = userData;
+        try {
+            const { email, password } = userData;
 
-        const saltRounds = 10;
-        const salt = await bcrypt.genSalt(saltRounds);
-        const hash = await bcrypt.hash(password, salt);
+            const saltRounds = 10;
+            const salt = await bcrypt.genSalt(saltRounds);
+            const hash = await bcrypt.hash(password, salt);
 
-        const newUser = this.userRepository.create({
-            email: email,
-            password: hash,
-        })
+            const user = await this.userRepository.findOneBy({email})
+            if (user) throw { message: "User already exists", status: 404 }
 
-        await this.userRepository.save(newUser)
+            const newUser = this.userRepository.create({
+                email: email,
+                password: hash,
+            })
+
+            await this.userRepository.save(newUser)
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+        }
     }
 
     async logIn(userData){

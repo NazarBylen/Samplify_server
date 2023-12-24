@@ -11,12 +11,12 @@ export class SongsService {
         private songsRepository: Repository<Songs>,
     ) {}
 
-    getSongs(): Promise<Songs[]> {
-        return this.songsRepository.find();
+    async getSongs(): Promise<Songs[]> {
+        return await this.songsRepository.find();
     }
 
-    getSongsWithArtist(): Promise<Songs[]> {
-        return this.songsRepository.find({
+    async getSongsWithArtist(): Promise<Songs[]> {
+        return await this.songsRepository.find({
             relations: {
                 artist: true,
             },

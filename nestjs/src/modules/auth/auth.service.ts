@@ -4,6 +4,7 @@ import { HttpException, HttpStatus, Injectable, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './users.entity';
+import { Favourites } from '../favourites/favourites.entity';
 import { generateAccessToken, generateRefreshToken } from "../../../utils/jwt";
 
 @Injectable()
@@ -11,6 +12,8 @@ export class AuthService {
     constructor(
         @InjectRepository(Users)
         private userRepository: Repository<Users>,
+        @InjectRepository(Favourites)
+        private favouritesRepository: Repository<Favourites>
     ) {}
 
     async signUp(userData) {
@@ -81,6 +84,8 @@ export class AuthService {
 
     async deleteUser(id: number) {
         const user = await this.userRepository.findOneBy({ id })
+
+        await this.favouritesRepository.delete({ userId: id });
         await this.userRepository.delete(user)
     }
 }

@@ -7,17 +7,17 @@ export class ArtistsController {
     constructor(private artistsService: ArtistsService) {}
 
     @Get("/")
-    findAll(): Promise<Artists[]> {
-        return this.artistsService.getArtists()
+    async findAll(): Promise<Artists[]> {
+        return await this.artistsService.getArtists()
     }
 
     @Get("/songs")
-    findArtistsWithSongs(): Promise<Artists[]> {
-        return this.artistsService.getArtistsWithSongs()
+    async findArtistsWithSongs(): Promise<Artists[]> {
+        return await this.artistsService.getArtistsWithSongs()
     }
 
     @Get("/:slug")
-    findBySlug(@Param('slug') slug: string): Promise<Artists | null> {
-        return this.artistsService.getArtist(slug)
+    async findBySlug(@Param('slug') slug: string): Promise<Artists | null> {
+        return await this.artistsService.getArtist(slug)
     }
 }

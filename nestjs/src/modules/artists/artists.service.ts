@@ -10,19 +10,19 @@ export class ArtistsService {
         private artistRepository: Repository<Artists>,
     ) {}
 
-    getArtists(): Promise<Artists[]> {
-        return this.artistRepository.find();
+    async getArtists(): Promise<Artists[]> {
+        return await this.artistRepository.find();
     }
 
-    getArtistsWithSongs(): Promise<Artists[]> {
-        return this.artistRepository.find({
+    async getArtistsWithSongs(): Promise<Artists[]> {
+        return await this.artistRepository.find({
             relations: {
                 songs: true,
             }
         });
     }
 
-    getArtist(slug: string): Promise<Artists | null> {
-        return this.artistRepository.findOneBy({ slug });
+    async getArtist(slug: string): Promise<Artists | null> {
+        return await this.artistRepository.findOneBy({ slug });
     }
 }

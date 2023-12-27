@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Songs } from './songs.entity';
+import { SongsDto, SongsByArtistDto } from "./songs.dto"
 import {pagination, paginationLimit, paginationOffset} from "../../../utils/pagination";
 
 @Injectable()
@@ -11,7 +12,7 @@ export class SongsService {
         private songsRepository: Repository<Songs>,
     ) {}
 
-    async getSongs(): Promise<Songs[]> {
+    async getSongs(): Promise<SongsDto[]> {
         return await this.songsRepository.find();
     }
 
@@ -23,7 +24,7 @@ export class SongsService {
         });
     }
 
-    async getSongsByArtist(id: number, page: number): Promise<{ data: any; meta: { per_page: number; total: any; pages: number; last_page: boolean; page: number } }> {
+    async getSongsByArtist(id: number, page: number): Promise<SongsByArtistDto> {
 
         const allSongs = await this.songsRepository.findAndCount({
             where: {

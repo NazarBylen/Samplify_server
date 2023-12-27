@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Users } from './users.entity';
 import { Favourites } from '../favourites/favourites.entity';
 import { generateAccessToken, generateRefreshToken } from "../../../utils/jwt";
+import { UserDataDto } from "./auth.dto"
 
 @Injectable()
 export class AuthService {
@@ -16,7 +17,7 @@ export class AuthService {
         private favouritesRepository: Repository<Favourites>
     ) {}
 
-    async signUp(userData) {
+    async signUp(userData: UserDataDto) {
         try {
             const { email, password } = userData;
 
@@ -38,7 +39,7 @@ export class AuthService {
         }
     }
 
-    async logIn(userData){
+    async logIn(userData: UserDataDto){
         try {
             const { email, password } = userData;
 

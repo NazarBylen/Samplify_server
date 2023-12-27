@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-
+import { FavouritesDto } from "./favourites.dto"
 import { Favourites } from "./favourites.entity"
 
 @Injectable()
@@ -11,11 +11,11 @@ export class FavouritesService {
         private favouritesRepository: Repository<Favourites>,
     ) {}
 
-    async getFavourites(): Promise<Favourites[]> {
+    async getFavourites(): Promise<FavouritesDto[]> {
         return await this.favouritesRepository.find();
     }
 
-    async getFavouriteSongsById(userId: number) {
+    async getFavouriteSongsById(userId: number): Promise<FavouritesDto[]> {
 
         return await this.favouritesRepository.find({
             where: {

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Artists } from './artists.entity';
+import { ArtistsDto } from "./artists.dto"
 
 @Injectable()
 export class ArtistsService {
@@ -10,11 +11,11 @@ export class ArtistsService {
         private artistRepository: Repository<Artists>,
     ) {}
 
-    async getArtists(): Promise<Artists[]> {
+    async getArtists(): Promise<ArtistsDto[]> {
         return await this.artistRepository.find();
     }
 
-    async getArtistsWithSongs(): Promise<Artists[]> {
+    async getArtistsWithSongs(): Promise<ArtistsDto[]> {
         return await this.artistRepository.find({
             relations: {
                 songs: true,
@@ -22,7 +23,7 @@ export class ArtistsService {
         });
     }
 
-    async getArtist(slug: string): Promise<Artists | null> {
+    async getArtist(slug: string): Promise<ArtistsDto | null> {
         return await this.artistRepository.findOneBy({ slug });
     }
 }

@@ -1,23 +1,23 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { SongsService } from "./songs.service"
-import Songs from "./songs.entity";
+import { SongsDto, SongsByArtistDto } from "./songs.dto";
 
 @Controller('songs')
 export class SongsController {
     constructor(private songsService: SongsService) {}
 
     @Get("/")
-    async findAll(): Promise<Songs[]> {
+    async findAll(): Promise<SongsDto[]> {
         return await this.songsService.getSongs()
     }
 
     @Get("/artist")
-    async findWithArtist(): Promise<Songs[]> {
+    async findWithArtist(): Promise<SongsDto[]> {
         return await this.songsService.getSongsWithArtist()
     }
 
     @Get("/:id?")
-    async findByArtist(@Param('id') id: number, @Query('page') page: number): Promise<{ data: any; meta: { per_page: number; total: any; pages: number; last_page: boolean; page: number } }> {
+    async findByArtist(@Param('id') id: number, @Query('page') page: number): Promise<SongsByArtistDto> {
         return await this.songsService.getSongsByArtist(id, page)
     }
 }

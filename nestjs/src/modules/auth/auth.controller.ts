@@ -30,5 +30,10 @@ export class UsersController {
     async deleteUser(@Param('id') id: number) {
         return await this.userService.deleteUser(id);
     }
+
+    @Post("/refresh/:id")
+    async checkRefreshToken(@Param('id') id: number, @Body('refresh-token') refreshToken: string) {
+        return await this.userService.refreshToken(id, refreshToken);
+    }
 }
 

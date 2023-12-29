@@ -7,6 +7,7 @@ import { Users } from './users.entity';
 import { Favourites } from '../favourites/favourites.entity';
 import { generateAccessToken, generateRefreshToken } from "../../../utils/jwt";
 import { UserDataDto } from "./auth.dto"
+import e from "express";
 
 @Injectable()
 export class AuthService {
@@ -95,5 +96,27 @@ export class AuthService {
 
         await this.favouritesRepository.delete({ userId: id });
         await this.userRepository.delete(user)
+    }
+
+    async refreshToken(id: number, refreshToken: string) {
+        try {
+
+            console.log(id);
+            console.log(refreshToken);
+            const errorMessage = { message: "Something went wrong", status: 404 };
+
+            const user = await this.userRepository.findOneBy({ id })
+            if (!user) throw errorMessage
+
+            if (user.refreshToken === refreshToken) {
+                return;
+            }
+            else {
+                throw { message: "Something went wrong", status: 404 }
+            }
+
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+        }
     }
 }

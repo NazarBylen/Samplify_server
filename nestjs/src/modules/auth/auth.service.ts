@@ -7,7 +7,6 @@ import { Users } from './users.entity';
 import { Favourites } from '../favourites/favourites.entity';
 import { generateAccessToken, generateRefreshToken } from "../../../utils/jwt";
 import { UserDataDto } from "./auth.dto"
-import e from "express";
 
 @Injectable()
 export class AuthService {
@@ -50,8 +49,8 @@ export class AuthService {
             const checkPassword = await bcrypt.compare(password, user.password);
             if (!checkPassword) throw { message: "Wrong username or password", status: 401 }
 
-            const accessToken = generateAccessToken ({email})
-            const refreshToken = generateRefreshToken ({email})
+            const accessToken = generateAccessToken (user)
+            const refreshToken = generateRefreshToken (user)
 
             user.accessToken = accessToken;
             user.refreshToken = refreshToken;

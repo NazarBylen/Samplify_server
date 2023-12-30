@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { FavouritesDto } from "./favourites.dto"
 import { Favourites } from "./favourites.entity"
+import { isTokenExpired } from "../../../utils/jwt";
 
 @Injectable()
 export class FavouritesService {
@@ -11,18 +12,19 @@ export class FavouritesService {
         private favouritesRepository: Repository<Favourites>,
     ) {}
 
-    async getFavourites(): Promise<FavouritesDto[]> {
-        return await this.favouritesRepository.find();
-    }
-
-    async getFavouriteSongsById(userId: number): Promise<FavouritesDto[]> {
-
-        return await this.favouritesRepository.find({
-            where: {
-                userId,
-            },
-            relations: ['song', 'song.artist']
-        });
+    async getFavouriteSongsById(userId: number, expDate:string): Promise<FavouritesDto[]> {
+        try {
+            if (isTokenExpired(expDate)) throw new UnauthorizedException(HttpStatus.UNAUTHORIZED);
+            return await this.favouritesRepository.find({
+                where: {
+                    userId,
+                },
+                relations: ['song', 'song.artist']
+            });
+        }
+         catch (e) {
+            throw new UnauthorizedException(HttpStatus.UNAUTHORIZED);
+        }
     }
 
     async saveToFavourites(userId: number, songId: number) {

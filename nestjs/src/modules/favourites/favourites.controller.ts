@@ -1,20 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Req } from "@nestjs/common";
 import { FavouritesService } from "./favourites.service";
 import { FavouritesDto, AddFavouritesDto } from "./favourites.dto"
+import * as jwt from "jsonwebtoken";
+import { decodeToken } from "../../../utils/jwt"
 
 @Controller('favourites')
 export class FavouritesController {
     constructor(private favouritesService: FavouritesService) {}
 
     @Get("/")
-    async findAll(): Promise<FavouritesDto[]> {
-        return await this.favouritesService.getFavourites()
-    }
-
-    @Get("/:userId")
-    async findByUserId(@Param('userId') userId: string): Promise<FavouritesDto[]> {
-
-        return await this.favouritesService.getFavouriteSongsById(Number(userId))
+    async getFavouritesByUserId(@Req() req: Request): Promise<FavouritesDto[]> {
+        const token = req.headers["authorization"].replace("Bearer ", "");
+        const decodedToken = await decodeToken(token)
+        console.log(decodedToken);
+        const userId = decodedToken['userId']
+        return await this.favouritesService.getFavouriteSongsById(Number(userId), decodedToken['exp'])
     }
 
     @Post("/")

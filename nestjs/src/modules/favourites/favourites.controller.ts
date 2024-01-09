@@ -12,7 +12,6 @@ export class FavouritesController {
     async getFavouritesByUserId(@Req() req: Request): Promise<FavouritesDto[]> {
         const token = req.headers["authorization"].replace("Bearer ", "");
         const decodedToken = await decodeToken(token)
-        console.log(decodedToken);
         const userId = decodedToken['userId']
         return await this.favouritesService.getFavouriteSongsById(Number(userId), decodedToken['exp'])
     }

@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { UserDataDto } from "./auth.dto"
+import { AuthDto, UserDataDto } from "./auth.dto"
+import { FavouritesDto } from "../favourites/favourites.dto";
+import { decodeRefreshToken, decodeToken } from "../../../utils/jwt";
 
 @Controller('auth')
 export class UsersController {
@@ -16,7 +18,7 @@ export class UsersController {
         return await this.userService.logIn(userData);
     }
 
-    @Get("/:id")
+    @Get("/profile/:id")
     async getUserInfo(@Param('id') id: number) {
         return await this.userService.userInfo(id);
     }
@@ -31,9 +33,12 @@ export class UsersController {
         return await this.userService.deleteUser(id);
     }
 
-    @Post("/refresh/:id")
-    async checkRefreshToken(@Param('id') id: number, @Body('refresh-token') refreshToken: string) {
-        return await this.userService.refreshToken(id, refreshToken);
+    @Post("/refresh-token")
+    async refreshToken(@Req() req: Request, @Body('refresh-token') refreshToken: string) {
+        refreshToken = JSON.parse(refreshToken)
+        const decodedToken = await decodeRefreshToken(refreshToken)
+        const userId = decodedToken['userId']
+        return await this.userService.refreshTokens(Number(userId));
     }
 }
 

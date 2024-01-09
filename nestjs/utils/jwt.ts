@@ -18,8 +18,23 @@ export async function decodeToken(token) {
         token,
         {
             secret: "ACCESS_TOKEN_SECRET"
-        }
+        },
     )
+    } catch {
+        throw new UnauthorizedException();
+    }
+}
+
+export async function decodeRefreshToken(token) {
+    const jwtService = new JwtService();
+
+    try {
+        return await jwtService.verify(
+            token,
+            {
+                secret: "REFRESH_TOKEN_SECRET"
+            },
+        )
     } catch {
         throw new UnauthorizedException();
     }

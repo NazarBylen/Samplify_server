@@ -15,7 +15,8 @@ export class AuthService {
         private userRepository: Repository<Users>,
         @InjectRepository(Favourites)
         private favouritesRepository: Repository<Favourites>
-    ) {}
+    ) {
+    }
 
     async signUp(userData: UserDataDto) {
         try {
@@ -25,7 +26,7 @@ export class AuthService {
             const salt = await bcrypt.genSalt(saltRounds);
             const hash = await bcrypt.hash(password, salt);
 
-            const user = await this.userRepository.findOneBy({email})
+            const user = await this.userRepository.findOneBy({ email })
             if (user) throw { message: "User already exists", status: 404 }
 
             const newUser = this.userRepository.create({
@@ -39,18 +40,18 @@ export class AuthService {
         }
     }
 
-    async logIn(userData: UserDataDto){
+    async logIn(userData: UserDataDto) {
         try {
             const { email, password } = userData;
 
-            const user = await this.userRepository.findOneBy({email})
+            const user = await this.userRepository.findOneBy({ email })
             if (!user) throw { message: "User does not exist", status: 404 }
 
             const checkPassword = await bcrypt.compare(password, user.password);
             if (!checkPassword) throw { message: "Wrong username or password", status: 401 }
 
-            const accessToken = generateAccessToken (user)
-            const refreshToken = generateRefreshToken (user)
+            const accessToken = generateAccessToken(user)
+            const refreshToken = generateRefreshToken(user)
 
             user.accessToken = accessToken;
             user.refreshToken = refreshToken;
@@ -71,7 +72,7 @@ export class AuthService {
         }
     }
 
-    async userInfo(id: number){
+    async userInfo(id: number) {
         const currentUser = await this.userRepository.findOneBy({ id })
 
         return {
@@ -79,7 +80,7 @@ export class AuthService {
         }
     }
 
-    async changePassword(id: number, newPassword: string){
+    async changePassword(id: number, newPassword: string) {
         const user = await this.userRepository.findOneBy({ id })
 
         const saltRounds = 10;
@@ -97,25 +98,25 @@ export class AuthService {
         await this.userRepository.delete(user)
     }
 
-    async refreshToken(id: number, refreshToken: string) {
+    async refreshTokens(userId: number) {
         try {
+            const user = await this.userRepository.findOneBy({id: userId})
+            if (!user) throw { message: "User does not exist", status: 404 }
 
-            console.log(id);
-            console.log(refreshToken);
-            const errorMessage = { message: "Something went wrong", status: 404 };
+            const accessToken = generateAccessToken(user)
+            const refreshToken = generateRefreshToken(user)
 
-            const user = await this.userRepository.findOneBy({ id })
-            if (!user) throw errorMessage
+            user.accessToken = accessToken;
+            user.refreshToken = refreshToken;
 
-            if (user.refreshToken === refreshToken) {
-                return;
+            await this.userRepository.save(user)
+
+            return {
+                refreshToken: user.refreshToken,
+                accessToken: user.accessToken,
             }
-            else {
-                throw { message: "Something went wrong", status: 404 }
-            }
-
-        } catch (error) {
+        } catch(error) {
             throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
-    }
+}
 }

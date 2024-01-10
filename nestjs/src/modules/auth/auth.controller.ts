@@ -35,10 +35,10 @@ export class UsersController {
 
     @Post("/refresh-token")
     async refreshToken(@Req() req: Request, @Body('refresh-token') refreshToken: string) {
-        refreshToken = JSON.parse(refreshToken)
-        const decodedToken = await decodeRefreshToken(refreshToken)
+        const parsedRefreshToken = JSON.parse(refreshToken)
+        const decodedToken = await decodeRefreshToken(parsedRefreshToken)
         const userId = decodedToken['userId']
-        return await this.userService.refreshTokens(Number(userId));
+        return await this.userService.refreshTokens(Number(userId), parsedRefreshToken);
     }
 }
 

@@ -98,22 +98,28 @@ export class AuthService {
         await this.userRepository.delete(user)
     }
 
-    async refreshTokens(userId: number) {
+    async refreshTokens(userId: number, passedRefreshToken: string) {
         try {
+
             const user = await this.userRepository.findOneBy({id: userId})
             if (!user) throw { message: "User does not exist", status: 404 }
 
-            const accessToken = generateAccessToken(user)
-            const refreshToken = generateRefreshToken(user)
+            if(user.refreshToken===passedRefreshToken) {
+                const accessToken = generateAccessToken(user)
+                const refreshToken = generateRefreshToken(user)
 
-            user.accessToken = accessToken;
-            user.refreshToken = refreshToken;
+                user.accessToken = accessToken;
+                user.refreshToken = refreshToken;
 
-            await this.userRepository.save(user)
+                await this.userRepository.save(user)
 
-            return {
-                refreshToken: user.refreshToken,
-                accessToken: user.accessToken,
+                return {
+                    refreshToken: user.refreshToken,
+                    accessToken: user.accessToken,
+                }
+            }
+            else {
+                throw { message: "Invalid refresh token", status: 401 };
             }
         } catch(error) {
             throw new HttpException(error.message, HttpStatus.NOT_FOUND);

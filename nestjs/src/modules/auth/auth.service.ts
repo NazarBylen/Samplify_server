@@ -105,6 +105,7 @@ export class AuthService {
             if (!user) throw { message: "User does not exist", status: 404 }
 
             if(user.refreshToken===passedRefreshToken) {
+                console.log("token valid")
                 const accessToken = generateAccessToken(user)
                 const refreshToken = generateRefreshToken(user)
 

@@ -7,7 +7,7 @@ export function generateAccessToken(user) {
 }
 
 export function generateRefreshToken(user) {
-  return jwt.sign({userId: user.id}, 'REFRESH_TOKEN_SECRET', { expiresIn: "120m" })
+  return jwt.sign({userId: user.id}, 'REFRESH_TOKEN_SECRET', { expiresIn: "2m" })
 }
 
 export async function decodeToken(token) {

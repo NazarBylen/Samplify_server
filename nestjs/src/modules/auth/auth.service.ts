@@ -1,11 +1,11 @@
 import * as bcrypt from 'bcrypt';
 
-import { HttpException, HttpStatus, Injectable, Post } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Post, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './users.entity';
 import { Favourites } from '../favourites/favourites.entity';
-import { generateAccessToken, generateRefreshToken } from "../../../utils/jwt";
+import { generateAccessToken, generateRefreshToken, isTokenExpired } from "../../../utils/jwt";
 import { UserDataDto } from "./auth.dto"
 
 @Injectable()
@@ -98,8 +98,10 @@ export class AuthService {
         await this.userRepository.delete(user)
     }
 
-    async refreshTokens(userId: number, passedRefreshToken: string) {
+    async refreshTokens(userId: number, passedRefreshToken: string, expDate:string) {
         try {
+            console.log(expDate);
+            if (isTokenExpired(expDate)) throw new UnauthorizedException(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
 
             const user = await this.userRepository.findOneBy({id: userId})
             if (!user) throw { message: "User does not exist", status: 404 }
@@ -123,7 +125,8 @@ export class AuthService {
                 throw { message: "Invalid refresh token", status: 401 };
             }
         } catch(error) {
-            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+            console.log(error);
+            throw new HttpException(error.message, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
 }
 }

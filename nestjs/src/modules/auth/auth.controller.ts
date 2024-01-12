@@ -38,7 +38,7 @@ export class UsersController {
         const parsedRefreshToken = JSON.parse(refreshToken)
         const decodedToken = await decodeRefreshToken(parsedRefreshToken)
         const userId = decodedToken['userId']
-        return await this.userService.refreshTokens(Number(userId), parsedRefreshToken);
+        return await this.userService.refreshTokens(Number(userId), parsedRefreshToken, decodedToken['exp']);
     }
 }
 

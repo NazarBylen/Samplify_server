@@ -60,7 +60,6 @@ export class AuthService {
 
             await this.userRepository.save(user)
 
-
             return {
                 id,
                 email,

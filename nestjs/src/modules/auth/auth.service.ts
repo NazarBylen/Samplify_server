@@ -48,7 +48,7 @@ export class AuthService {
             if (!user) throw { message: "User does not exist", status: 404 }
 
             const checkPassword = await bcrypt.compare(password, user.password);
-            if (!checkPassword) throw { message: "Wrong username or password", status: 401 }
+            if (!checkPassword) throw { message: "Wrong username or password", status: 404 }
 
             const accessToken = generateAccessToken(user)
             const refreshToken = generateRefreshToken(user)
@@ -68,7 +68,8 @@ export class AuthService {
                 refreshToken
             }
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+            console.log(error);
+            throw new HttpException(error.message, error.status);
         }
     }
 
